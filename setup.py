@@ -10,7 +10,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(),
-    install_requires=["py-getch==1.0.1"],
+    install_requires=[],
     url="https://github.com/amiraslanaslani/patinput",
     project_urls={
         "Bug Tracker": "https://github.com/amiraslanaslani/patinput/issues",
@@ -20,6 +20,10 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
         "Operating System :: Microsoft :: Windows",
+        "Operating System :: POSIX",
+        "Operating System :: POSIX :: Linux",
+        "Operating System :: Unix",
+        "Environment :: Console",
     ],
     python_requires=">=3.6",
 )

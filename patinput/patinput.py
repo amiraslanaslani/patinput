@@ -1,7 +1,25 @@
 import sys
-from getch import getch
 from typing import Callable, Union
 
+from patinput import its_win32
+from patinput.getch import getch
+
+
+if its_win32:
+    _right_arrow = 77
+    _left_arrow = 75
+    _del = 83
+    _back_space = 8
+    _enter = 13
+    _check_special_key_1 = lambda b: b == 224
+else:
+    _right_arrow = 67
+    _left_arrow = 68
+    _del = 51
+    _back_space = 127
+    _enter = 13
+    _check_special_key_1 = lambda b: b == 27 and getch()[0] == 91 
+    
 
 def patinput(
     allowness: Callable[[int, int, str], bool]=lambda a,b,c: True, 
@@ -64,11 +82,11 @@ def patinput(
         b = b[0]
         if interrupt(b, cursor_pos, inp):
             return None
-        if b == 13:  # Enter
+        if b == _enter:  # Enter
             if ends_nl:
                 print()
             return inp
-        elif b == 8:  # Backspace
+        elif b == _back_space:  # Backspace
             if cursor_pos > 0:
                 addition = inp[cursor_pos:]
                 simprint(
@@ -80,17 +98,17 @@ def patinput(
                     simprint(f"\033[{len(addition)}D")  # move cursor to original position
                 inp = inp[:cursor_pos-1] + inp[cursor_pos:]
                 cursor_pos -= 1
-        elif b == 224:  # Arrow keys
+        elif _check_special_key_1(b):  # Arrow keys
             b = getch()[0]
-            if b == 77:  # Right
+            if b == _right_arrow:  # Right
                 if cursor_pos < len(inp):
                     simprint("\033[1C")
                     cursor_pos += 1
-            elif b == 75:  # Left
+            elif b == _left_arrow:  # Left
                 if cursor_pos > 0:
                     simprint("\033[1D")
                     cursor_pos -= 1
-            elif b == 83:  # Del
+            elif b == _del:  # Del
                 if cursor_pos < len(inp):
                     addition = inp[cursor_pos+1:]
                     simprint(
